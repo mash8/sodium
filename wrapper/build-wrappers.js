@@ -16,21 +16,21 @@ const libsodiumModuleName = argv[2],
 
 //Loading preset macros
 var macros = {};
-var macrosFiles = fs.readdirSync(path.join(__dirname, "macros"));
+var macrosFiles = fs.readdirSync(path.join(import.meta.dirname, "macros"));
 for (var i = 0; i < macrosFiles.length; i++) {
   var macroName = macrosFiles[i].replace(".js", "");
   if (!macroName.match(/^[a-z0-9_]+$/)) {
     continue;
   }
   var macroCode = fs.readFileSync(
-    path.join(__dirname, "macros", macrosFiles[i]), {
+    path.join(import.meta.dirname, "macros", macrosFiles[i]), {
     encoding: "utf8"
   }
   );
   macros[macroName] = macroCode;
 }
 
-var templateCode = fs.readFileSync(path.join(__dirname, "wrap-template.js"), {
+var templateCode = fs.readFileSync(path.join(import.meta.dirname, "wrap-template.js"), {
   encoding: "utf8"
 });
 
@@ -40,13 +40,13 @@ var exportsCode = "";
 
 //Load symbols. Write their wrapping code without checking their existence in emcc-built library
 var symbols = [];
-var symbolsFiles = fs.readdirSync(path.join(__dirname, "symbols")).sort();
+var symbolsFiles = fs.readdirSync(path.join(import.meta.dirname, "symbols")).sort();
 for (var i = 0; i < symbolsFiles.length; i++) {
   if (symbolsFiles[i].lastIndexOf(".json") !== symbolsFiles[i].length - 5) {
     continue;
   }
   var currentSymbol = fs.readFileSync(
-    path.join(__dirname, "symbols", symbolsFiles[i]), {
+    path.join(import.meta.dirname, "symbols", symbolsFiles[i]), {
     encoding: "utf8"
   }
   );
@@ -265,7 +265,7 @@ function injectTabs(code, count) {
 }
 
 function loadConstants() {
-  var constList = fs.readFileSync(path.join(__dirname, "constants.json"), {
+  var constList = fs.readFileSync(path.join(import.meta.dirname, "constants.json"), {
     encoding: "utf8"
   });
   try {
